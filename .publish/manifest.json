@@ -1,0 +1,28 @@
+{
+  "format": "site.tar.b64",
+  "parts": [
+    ".publish/binaries.b64/part-000.txt",
+    ".publish/binaries.b64/part-001.txt",
+    ".publish/binaries.b64/part-002.txt",
+    ".publish/binaries.b64/part-003.txt",
+    ".publish/binaries.b64/part-004.txt",
+    ".publish/binaries.b64/part-005.txt",
+    ".publish/binaries.b64/part-006.txt",
+    ".publish/binaries.b64/part-007.txt",
+    ".publish/binaries.b64/part-008.txt",
+    ".publish/binaries.b64/part-009.txt",
+    ".publish/binaries.b64/part-010.txt",
+    ".publish/binaries.b64/part-011.txt",
+    ".publish/binaries.b64/part-012.txt",
+    ".publish/binaries.b64/part-013.txt",
+    ".publish/binaries.b64/part-014.txt",
+    ".publish/binaries.b64/part-015.txt",
+    ".publish/binaries.b64/part-016.txt",
+    ".publish/binaries.b64/part-017.txt",
+    ".publish/binaries.b64/part-018.txt",
+    ".publish/binaries.b64/part-019.txt",
+    ".publish/binaries.b64/part-020.txt"
+  ],
+  "b64_bytes": 82493440,
+  "chunk": 4000000
+}
