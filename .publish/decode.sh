@@ -21,6 +21,12 @@ if [[ -d "$D198" ]]; then
   cat $(ls -1 "$D198"/part-*.txt | sort) | base64 -d | tar -x -C "$ROOT"
   echo "Applied D-198 to onetake-v3"
 fi
+# D-199: 3D r6 phone time reframe (onetake-v3 phone film 38/39, cg/phone 001-010, proxy-phone, film2.json, app-v3.js, index.html)
+D199="$ROOT/.publish/onetake-d199.b64"
+if [[ -d "$D199" ]]; then
+  cat $(ls -1 "$D199"/part-*.txt | sort) | base64 -d | tar -x -C "$ROOT"
+  echo "Applied D-199 to onetake-v3"
+fi
 # D-197: promote One Take v3 to /onetake/ (keeps /onetake/order/, shared bar/range CSS, rm-story fallback).
 # The d183 One Take stays in the main pack untouched and is also parked at /_parked/onetake-d183/.
 # Roll back: delete .publish/onetake-promote/ (one commit).

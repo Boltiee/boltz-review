@@ -1,6 +1,6 @@
 {
  "v": 2,
- "note": "D-179: one entry per segment; each has phone/desktop variants. frames = original frame index stored per slot (gaps of <=2 blend). Add UPDATE 4 segments here. D-183: phone sheets now 720x1280 cells (from the 720 masters), AVIF q56. FT2 (3D, 2026-11-21): clean replacement tail phone 177-226 / desktop 171-228 appended (no old AI watch face); last frame = One Take v3 photo hand-off. REVIEW COPY, not published.",
+ "note": "D-179: one entry per segment; each has phone/desktop variants. frames = original frame index stored per slot (gaps of <=2 blend). Add UPDATE 4 segments here. D-183: phone sheets now 720x1280 cells (from the 720 masters), AVIF q56. FT2 (3D, 2026-11-21): clean replacement tail phone 177-226 / desktop 171-228 appended (no old AI watch face); last frame = One Take v3 photo hand-off. REVIEW COPY, not published. r6 (2026-11-22): phone film 220-226 reframed for tall-phone crop (digits centred, <=832 px, >=124 px margins at 226).",
  "segments": {
   "film": {
    "phone": {
@@ -384,8 +384,8 @@
       "/boltz-review/onetake/video/seq/film-phone/35.avif?v=ft2",
       "/boltz-review/onetake/video/seq/film-phone/36.avif?v=ft2",
       "/boltz-review/onetake/video/seq/film-phone/37.avif?v=ft2",
-      "/boltz-review/onetake/video/seq/film-phone/38.avif?v=ft2",
-      "/boltz-review/onetake/video/seq/film-phone/39.avif?v=ft2"
+      "/boltz-review/onetake/video/seq/film-phone/38.avif?v=r6",
+      "/boltz-review/onetake/video/seq/film-phone/39.avif?v=r6"
      ],
      "webp": [
       "/boltz-review/onetake/video/seq/film-phone/00.webp?v=d183",
@@ -426,8 +426,8 @@
       "/boltz-review/onetake/video/seq/film-phone/35.webp?v=ft2",
       "/boltz-review/onetake/video/seq/film-phone/36.webp?v=ft2",
       "/boltz-review/onetake/video/seq/film-phone/37.webp?v=ft2",
-      "/boltz-review/onetake/video/seq/film-phone/38.webp?v=ft2",
-      "/boltz-review/onetake/video/seq/film-phone/39.webp?v=ft2"
+      "/boltz-review/onetake/video/seq/film-phone/38.webp?v=r6",
+      "/boltz-review/onetake/video/seq/film-phone/39.webp?v=r6"
      ]
     },
     "proxy": {
@@ -437,14 +437,14 @@
      ],
      "cols": 11,
      "rows": 15,
-     "avif": "/boltz-review/onetake/video/seq/film-phone/proxy.avif?v=ft2",
-     "webp": "/boltz-review/onetake/video/seq/film-phone/proxy.webp?v=ft2"
+     "avif": "/boltz-review/onetake/video/seq/film-phone/proxy.avif?v=r6",
+     "webp": "/boltz-review/onetake/video/seq/film-phone/proxy.webp?v=r6"
     },
     "bytes": {
-     "avif": 6785843,
-     "webp": 8748520,
-     "proxy_avif": 144821,
-     "proxy_webp": 250550
+     "avif": 6788205,
+     "webp": 8750676,
+     "proxy_avif": 144981,
+     "proxy_webp": 250612
     },
     "tail": {
      "replaced": [

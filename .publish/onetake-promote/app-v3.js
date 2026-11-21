@@ -8,6 +8,12 @@
 const mobile=matchMedia('(max-width:760px)').matches, reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const story=document.getElementById('story');
 function paint(){ want=true; kick(); }
+/* D-199: 3D r6 reframes the phone time (film 220-226, f001-f010) with a slight zoom-out; that invents a soft inpainted
+   border (widest side, 1080-frame px, from 3D's planned_transforms.json). Screens taller than 9:16 crop it away; on
+   9:16 screens (375x667 etc.) scale up just enough to keep it off-screen (max ~1.17x at f008, digits stay >=20 css px). */
+const R6_P={220:2.2,221:7.8,222:15.5,223:23.9,224:31.5,225:37.2,226:39.3};
+const R6_C=[39.3,42.9,46.4,49.9,55.5,61.1,66.5,72.8,53.6,18.9];
+function r6k(side,vwN){ if(!(side>0)) return 1; return Math.max(1, vwN/(1080-2*(side+4))); }
 function Film(canvas, fit){
   this.canvas=canvas;
   this.ctx=canvas?canvas.getContext('2d',{alpha:false,desynchronized:true}):null;
@@ -113,7 +119,8 @@ Film.prototype.draw=function(t){
   const key=main.s+main.q+(bs?'|'+bs.s+bs.q+blend.a.toFixed(2):'')+(ms?'|'+ms.s+ms.q+mix.a.toFixed(2):'');
   if(key===this.last) return;
   const fw=this.v.frame[0], fh=this.v.frame[1], cw=this.canvas.width, ch=this.canvas.height;
-  const scale=this.fit==='contain'?Math.min(cw/fw, ch/fh):Math.max(cw/fw, ch/fh);
+  let scale=this.fit==='contain'?Math.min(cw/fw, ch/fh):Math.max(cw/fw, ch/fh);
+  if(fw===720&&R6_P[idx]) scale*=r6k(R6_P[idx],cw/scale*1.5);
   const dw=fw*scale, dh=fh*scale, dx=(cw-dw)/2, dy=(ch-dh)/2, ctx=this.ctx;
   ctx.imageSmoothingQuality='high';
   ctx.fillStyle='#0f0f0e'; ctx.fillRect(0,0,cw,ch);
@@ -167,7 +174,7 @@ Seq.prototype.draw=function(f){
   // which would clip the route (3D's side margin is 72 px). So the fit eases from cover (watch, matches the photo hand-off)
   // to width-fit (whole frame width) while the route draws (f41-f57), and the top/bottom bands repeat the frame's edge rows.
   const cov=Math.max(w/this.fw,h/this.fh), con=Math.min(w/this.fw,h/this.fh), fm=this.fitMix(i);
-  const tgt=this.fmt==='phone'?this.routeScale(w,cov,con):cov, s=cov+(tgt-cov)*fm, dw=this.fw*s, dh=this.fh*s, dx=(w-dw)/2, dy=(h-dh)/2, ctx=this.ctx, k=sw/this.fw;
+  const tgt=this.fmt==='phone'?this.routeScale(w,cov,con):cov, s=(cov+(tgt-cov)*fm)*(this.fmt==='phone'&&i<10?r6k(R6_C[i],w/cov):1), dw=this.fw*s, dh=this.fh*s, dx=(w-dw)/2, dy=(h-dh)/2, ctx=this.ctx, k=sw/this.fw;
   ctx.imageSmoothingQuality='high'; ctx.fillStyle='#0f0f0e'; ctx.fillRect(0,0,w,h);
   if(dy>0.5){ ctx.drawImage(img,sx,sy,sw,Math.max(1,2*k),dx,0,dw,dy+1); ctx.drawImage(img,sx,sy+sh-Math.max(1,2*k),sw,Math.max(1,2*k),dx,dy+dh-1,dw,h-(dy+dh)+1); }
   if(dx>0.5){ ctx.drawImage(img,sx,sy,Math.max(1,2*k),sh,0,dy,dx+1,dh); ctx.drawImage(img,sx+sw-Math.max(1,2*k),sy,Math.max(1,2*k),sh,dx+dw-1,dy,w-(dx+dw)+1,dh); }
