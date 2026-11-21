@@ -33,6 +33,12 @@ if [[ -d "$D200" ]]; then
   cat $(ls -1 "$D200"/part-*.txt | sort) | base64 -d | tar -x -C "$ROOT"
   echo "Applied D-200 to onetake-v3"
 fi
+# D-201: section gaps + dead scroll tails (became/darkhour story length, onetake-v3 story 1076vh, reveal + solid nav restored)
+D201="$ROOT/.publish/onetake-d201.b64"
+if [[ -d "$D201" ]]; then
+  cat $(ls -1 "$D201"/part-*.txt | sort) | base64 -d | tar -x -C "$ROOT"
+  echo "Applied D-201 (became, darkhour, onetake-v3)"
+fi
 # D-197: promote One Take v3 to /onetake/ (keeps /onetake/order/, shared bar/range CSS, rm-story fallback).
 # The d183 One Take stays in the main pack untouched and is also parked at /_parked/onetake-d183/.
 # Roll back: delete .publish/onetake-promote/ (one commit).

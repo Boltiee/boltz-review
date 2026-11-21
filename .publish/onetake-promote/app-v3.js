@@ -211,7 +211,9 @@ const B1=document.getElementById('b1'), B2=document.getElementById('b2'), BE=doc
 const cgC=document.getElementById('cg');
 const film=new Film(document.getElementById('film'),'cover'); film.mix=null;
 let seq=null, v=null, slots=null, target=0, cur=0, want=true, raf=0;
-function progress(){ const r=story.getBoundingClientRect(), H=story.offsetHeight-innerHeight; return clamp(-r.top/H,0,1)*100; }
+// D-201: the story is 1076 screens tall (was 1200); SK keeps every frame at the same scroll position and ends ~0.3 screens after the hold line is in
+const SK=976/1100;
+function progress(){ const r=story.getBoundingClientRect(), H=story.offsetHeight-innerHeight; return clamp(-r.top/H,0,1)*100*SK; }
 function render(u){
   // photo film: by slot, now through the clean tail to 226/228 (= 3D f001), holding on its last slot
   if(v){ const n=v.frames.length, s=Math.round(ramp(u,0,U.photoEnd)*(n-1)); film.draw(v.frames[s]/(v.count-1)); }
@@ -222,7 +224,7 @@ function render(u){
   set(B1,u<1?1:fade(u,-1,0,9,12),-12);
   set(B2,fade(u,cgU(28),cgU(33),cgU(64),cgU(68)),14);
   set(BE,ramp(u,cgU(103),cgU(110)),12);
-  document.body.classList.toggle('story-done',u>99);
+  document.body.classList.toggle('story-done',u>99*SK);
 }
 function tick(){ raf=0; target=progress(); const d=target-cur; cur=Math.abs(d)<0.02?target:cur+d*(mobile?0.32:0.22); render(cur); if(cur!==target||want){ want=false; kick(); } }
 function kick(){ if(!raf) raf=requestAnimationFrame(tick); }
@@ -239,5 +241,13 @@ if(!reduce){
     window.__ot3={film,seq,U,render,get u(){return cur;}}; kick();
   }).catch(e=>console.warn(e));
   kick();
+}
+// D-201: restored from the d183 app.js (lost in v3): solid nav once the story is past, and the .reveal fade-in (the Signature 360 sat at opacity 0)
+{ const nav=document.getElementById('nav');
+  const navUpdate=()=>{ if(nav) nav.classList.toggle('solid', scrollY>story.offsetHeight-80); };
+  addEventListener('scroll',navUpdate,{passive:true}); navUpdate();
+  const els=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){ const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }),{threshold:.1}); els.forEach(el=>io.observe(el)); }
+  else els.forEach(el=>el.classList.add('in'));
 }
 })();
