@@ -18,21 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Decode packed binaries
-        run: bash .publish/decode.sh
-      - name: Try to enable GitHub Pages
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Decode packed site
         run: |
-          gh api --method POST /repos/${{ github.repository }}/pages \
-            -H "Accept: application/vnd.github+json" \
-            -f build_type=workflow \
-            || gh api --method PUT /repos/${{ github.repository }}/pages \
-              -H "Accept: application/vnd.github+json" \
-              -f build_type=workflow \
-            || true
+          if [ -f .publish/decode.sh ]; then
+            bash .publish/decode.sh
+          fi
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
