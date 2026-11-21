@@ -19,10 +19,8 @@
     ".publish/binaries.b64/part-015.txt",
     ".publish/binaries.b64/part-016.txt",
     ".publish/binaries.b64/part-017.txt",
-    ".publish/binaries.b64/part-018.txt",
-    ".publish/binaries.b64/part-019.txt",
-    ".publish/binaries.b64/part-020.txt"
+    ".publish/binaries.b64/part-018.txt"
   ],
-  "b64_bytes": 81715200,
+  "b64_bytes": 72062296,
   "chunk": 4000000
 }

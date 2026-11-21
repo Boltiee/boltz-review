@@ -14,9 +14,15 @@
   li { margin: 14px 0; }
   a { color: #eee; }
   .sub { color: #999; margin-left: 0.75em; font-size: 0.9em; }
+  /* D-180: same BOLTZ mark, size and place as every site and order page */
+  .top { position: absolute; top: 0; left: 0; right: 0; padding: calc(10px + env(safe-area-inset-top)) clamp(20px,5vw,64px) 10px; }
+  .bz-mark { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; padding: 0 12px 0 0; color: #eee; text-decoration: none; }
+  .bz-mark i { display: block; width: 84px; height: 13px; background: currentColor; -webkit-mask: url(became/assets/brand/boltz-wordmark.svg) 0 50%/contain no-repeat; mask: url(became/assets/brand/boltz-wordmark.svg) 0 50%/contain no-repeat; }
+  body { padding: 96px clamp(20px,5vw,64px) 48px; }
 </style>
 </head>
 <body>
+<header class="top"><a class="bz-mark" href="./" aria-label="Boltz home"><i aria-hidden="true"></i></a></header>
 <h1>Boltz concept previews</h1>
 <p>Review only. Not the live site.</p>
 <ul>
