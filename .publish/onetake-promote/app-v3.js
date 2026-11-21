@@ -11,8 +11,9 @@ function paint(){ want=true; kick(); }
 /* D-199: 3D r6 reframes the phone time (film 220-226, f001-f010) with a slight zoom-out; that invents a soft inpainted
    border (widest side, 1080-frame px, from 3D's planned_transforms.json). Screens taller than 9:16 crop it away; on
    9:16 screens (375x667 etc.) scale up just enough to keep it off-screen (max ~1.17x at f008, digits stay >=20 css px). */
-const R6_P={220:2.2,221:7.8,222:15.5,223:23.9,224:31.5,225:37.2,226:39.3};
-const R6_C=[39.3,42.9,46.4,49.9,55.5,61.1,66.5,72.8,53.6,18.9];
+// D-200: r7 values (3D reframed film 218-225 and eased f009-f013 back to identity at f014); widest left/right border in 1080 px.
+const R6_P={218:3.1,219:11.5,220:19.8,221:26.0,222:30.1,223:35.2,224:36.3,225:39.3,226:39.3};
+const R6_C=[39.3,42.9,46.3,49.9,55.5,61.0,66.4,72.7,79.9,87.7,65.8,43.8,21.9];
 function r6k(side,vwN){ if(!(side>0)) return 1; return Math.max(1, vwN/(1080-2*(side+4))); }
 function Film(canvas, fit){
   this.canvas=canvas;
@@ -144,7 +145,7 @@ function Seq(canvas, fmt, ext){
   this.fw=fmt==='phone'?1080:1920; this.fh=fmt==='phone'?1920:1080; this.pw=fmt==='phone'?180:320; this.ph=fmt==='phone'?320:180;
 }
 Seq.prototype.url=function(i){ return '/boltz-review/onetake/cg/'+this.fmt+'/'+String(i+1).padStart(3,'0')+'.'+this.ext; };
-Seq.prototype.loadProxy=function(){ return fetch('/boltz-review/onetake/cg/proxy-'+this.fmt+'.'+this.ext+'?v=r5').then(r=>r.blob()).then(Film.decode).then(b=>{this.proxy=b; this.last='';}); };
+Seq.prototype.loadProxy=function(){ return fetch('/boltz-review/onetake/cg/proxy-'+this.fmt+'.'+this.ext+'?v='+(this.fmt==='phone'?'r7':'r5')).then(r=>r.blob()).then(Film.decode).then(b=>{this.proxy=b; this.last='';}); };
 Seq.prototype.fetch=function(i){ if(!this.blob[i]) this.blob[i]=fetch(this.url(i)).then(r=>r.ok?r.blob():null).catch(()=>null); return this.blob[i]; };
 Seq.prototype.inWin=function(i){ const d=i-this.cur; return this.dir>=0?(d>=-3&&d<=10):(d<=3&&d>=-10); };
 Seq.prototype.pump=function(){
@@ -160,11 +161,27 @@ Seq.prototype.pump=function(){
 Seq.prototype.fitMix=function(i){ if(this.fmt!=='phone') return 0; const t=Math.max(0,Math.min(1,(i-40)/16)); return t*t*(3-2*t); };
 // r5: 3D's phone route keeps >=115 px side margins, so only ease as far as needed to keep the route >=20 css px clear of the screen edge
 Seq.prototype.routeScale=function(w,cov,con){ const r=Math.min(devicePixelRatio||1,2); return Math.max(con,Math.min(cov,(w/2-20*r)/(this.fw/2-115))); };
+/* D-200: phone hold. Lucas: the plaque + medal should sit higher and a bit bigger. Over 3D's pull-back (f062-f102, riding the camera's own progress so it never reverses)
+   ease a zoom (<=1.3x) and shift so the settled plaque+medal box (1080x1920 frame px, x 309-788, y 990-1665) is centred
+   between the hold line's bottom and the order bar, medal >=24 css px clear of the bar, box >=16 css px inside the sides. */
+const HOLD={x0:309,x1:788,y0:990,y1:1665,zmax:1.3,
+  // 3D's camera pull-back as the route's width in frame px, f061 (845) to f102 (settled, 414). The zoom/shift ride the camera's own
+  // progress t, so the apparent pull-back keeps 3D's easing (just ~30% shorter) and never reverses or kinks.
+  pb:[845,842,839,835,829,823,815,805,794,784,771,757,741,724,707,689,672,653,636,619,601,583,567,552,537,523,509,497,485,474,464,455,447,441,435,430,425,422,419,417,415,414]};
+HOLD.t=function(i){ const f=i+1; if(f<=61) return 0; if(f>=102) return 1; return (845-this.pb[f-61])/(845-414); };
+Seq.prototype.holdT=function(w,h,s,r){
+  if(this._ht&&this._ht.k===w+'x'+h+'x'+s) return this._ht;
+  const cr=this.c.getBoundingClientRect(), be=document.getElementById('bEnd'), bar=document.querySelector('.bz-order-bar');
+  const hbC=be?be.offsetTop+be.offsetHeight:innerHeight*0.25, br=bar&&bar.getBoundingClientRect(), btC=(br&&br.height&&br.top<innerHeight)?br.top:innerHeight;
+  const hb=(hbC-cr.top)*r, bt=(btC-cr.top)*r, bw=(HOLD.x1-HOLD.x0)*s, bh=(HOLD.y1-HOLD.y0)*s;
+  const z=Math.max(1,Math.min(HOLD.zmax,(bt-hb-2*24*r)/bh,(w-2*16*r)/bw));
+  return this._ht={k:w+'x'+h+'x'+s,z,cx:w/2,cy:(hb+bt)/2};
+};
 Seq.prototype.draw=function(f){
   const i=Math.max(0,Math.min(this.N-1,Math.round(f)));
   if(i!==this.cur){ this.dir=i>this.cur?1:-1; this.cur=i; } this.pump();
   const c=this.c, r=Math.min(devicePixelRatio||1,2), w=Math.round((c.clientWidth||innerWidth)*r), h=Math.round((c.clientHeight||innerHeight)*r);
-  if(c.width!==w||c.height!==h){ c.width=w; c.height=h; this.last=''; }
+  if(c.width!==w||c.height!==h){ c.width=w; c.height=h; this.last=''; this._ht=null; }
   let img=null,sx=0,sy=0,sw=this.fw,sh=this.fh,q='';
   if(this.bm[i]){ img=this.bm[i]; q='f'+i; }
   else { for(let k=1;k<=2&&!img;k++) for(const j of [i-this.dir*k,i+this.dir*k]) if(this.bm[j]){ img=this.bm[j]; q='n'+j; break; }
@@ -174,11 +191,15 @@ Seq.prototype.draw=function(f){
   // which would clip the route (3D's side margin is 72 px). So the fit eases from cover (watch, matches the photo hand-off)
   // to width-fit (whole frame width) while the route draws (f41-f57), and the top/bottom bands repeat the frame's edge rows.
   const cov=Math.max(w/this.fw,h/this.fh), con=Math.min(w/this.fw,h/this.fh), fm=this.fitMix(i);
-  const tgt=this.fmt==='phone'?this.routeScale(w,cov,con):cov, s=(cov+(tgt-cov)*fm)*(this.fmt==='phone'&&i<10?r6k(R6_C[i],w/cov):1), dw=this.fw*s, dh=this.fh*s, dx=(w-dw)/2, dy=(h-dh)/2, ctx=this.ctx, k=sw/this.fw;
+  const tgt=this.fmt==='phone'?this.routeScale(w,cov,con):cov; let s=(cov+(tgt-cov)*fm)*(this.fmt==='phone'&&i<R6_C.length?r6k(R6_C[i],w/cov):1), dw=this.fw*s, dh=this.fh*s, dx=(w-dw)/2, dy=(h-dh)/2; const ctx=this.ctx, k=sw/this.fw;
+  if(this.fmt==='phone'&&i>=61){ const e=HOLD.t(i), H=this.holdT(w,h,s,r), ax=(HOLD.x0+HOLD.x1)/2, ay=(HOLD.y0+HOLD.y1)/2;
+    const px=dx+ax*s+(H.cx-(dx+ax*s))*e, py=dy+ay*s+(H.cy-(dy+ay*s))*e; s*=(845-(845-H.z*414)*e)/(845-431*e); dw=this.fw*s; dh=this.fh*s; dx=px-ax*s; dy=py-ay*s; }
   ctx.imageSmoothingQuality='high'; ctx.fillStyle='#0f0f0e'; ctx.fillRect(0,0,w,h);
-  if(dy>0.5){ ctx.drawImage(img,sx,sy,sw,Math.max(1,2*k),dx,0,dw,dy+1); ctx.drawImage(img,sx,sy+sh-Math.max(1,2*k),sw,Math.max(1,2*k),dx,dy+dh-1,dw,h-(dy+dh)+1); }
-  if(dx>0.5){ ctx.drawImage(img,sx,sy,Math.max(1,2*k),sh,0,dy,dx+1,dh); ctx.drawImage(img,sx+sw-Math.max(1,2*k),sy,Math.max(1,2*k),sh,dx+dw-1,dy,w-(dx+dw)+1,dh); }
-  ctx.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh);
+  if(dy>0.5) ctx.drawImage(img,sx,sy,sw,Math.max(1,2*k),dx,0,dw,dy+1);
+  if(dy+dh<h-0.5) ctx.drawImage(img,sx,sy+sh-Math.max(1,2*k),sw,Math.max(1,2*k),dx,dy+dh-1,dw,h-(dy+dh)+1);
+  if(dx>0.5) ctx.drawImage(img,sx,sy,Math.max(1,2*k),sh,0,dy,dx+1,dh);
+  if(dx+dw<w-0.5) ctx.drawImage(img,sx+sw-Math.max(1,2*k),sy,Math.max(1,2*k),sh,dx+dw-1,dy,w-(dx+dw)+1,dh);
+  ctx.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh); this.lt=[dx,dy,s,r];
 };
 
 /* ---------- timeline (story units 0..100) ---------- */
@@ -206,7 +227,7 @@ function render(u){
 function tick(){ raf=0; target=progress(); const d=target-cur; cur=Math.abs(d)<0.02?target:cur+d*(mobile?0.32:0.22); render(cur); if(cur!==target||want){ want=false; kick(); } }
 function kick(){ if(!raf) raf=requestAnimationFrame(tick); }
 if(!reduce){
-  addEventListener('scroll',kick,{passive:true}); addEventListener('resize',()=>{film.last=-1; if(seq) seq.last=''; kick();},{passive:true});
+  addEventListener('scroll',kick,{passive:true}); addEventListener('resize',()=>{film.last=-1; if(seq){ seq.last=''; seq._ht=null; } kick();},{passive:true});
   const avifOk=new Promise(res=>{const im=new Image();im.onload=()=>res(im.width>0);im.onerror=()=>res(false);im.src='data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADrbWV0YQAAAAAAAAAhaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAAAAAAAOcGl0bQAAAAAAAQAAAB5pbG9jAAAAAEQAAAEAAQAAAAEAAAETAAAAIQAAAChpaW5mAAAAAAABAAAAGmluZmUCAAAAAAEAAGF2MDFDb2xvcgAAAABqaXBycAAAAEtpcGNvAAAAFGlzcGUAAAAAAAAAAQAAAAEAAAAQcGl4aQAAAAADCAgIAAAADGF2MUOBAAwAAAAAE2NvbHJuY2x4AAEADQAGgAAAABdpcG1hAAAAAAAAAAEAAQQBAoMEAAAAKW1kYXQSAAoIGAAGiAhoNCAyExlHh4Yhh5555oAAAJBAyRxhQr4=';setTimeout(()=>res(false),1500);});
   Promise.all([fetch('/boltz-review/onetake/video/seq/film2.json?v=ft2').then(r=>r.json()),avifOk]).then(async ([man,AVIF])=>{
     const seg=man.segments.film; v=mobile?seg.phone:seg.desktop; film.attach(v,AVIF?'avif':'webp');
