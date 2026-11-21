@@ -65,6 +65,27 @@ html:not(.css) #b1{visibility:visible}
   #story.v3 .v3-hold .end-line{font-size:clamp(40px,4.4vw,72px)}
 }
 </style>
+<style id="ot3-rm-css">/* D-198 reduced-motion v3 stills */
+.rm-story.v3{background:#0f0f0e}
+.rm3{position:relative;color:var(--bone,#F3EEE6);background:#0f0f0e;aspect-ratio:9/16;max-height:100svh;overflow:hidden}
+.rm3 picture,.rm3 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;aspect-ratio:auto}
+.rm3-copy{position:absolute;left:var(--pad,20px);right:var(--pad,20px);z-index:2}
+.rm3 .line{font-family:var(--serif,"Cormorant Garamond",serif);font-weight:400;font-size:clamp(34px,10vw,44px);line-height:1.05;margin:0;text-wrap:balance;text-shadow:0 2px 6px rgba(15,15,14,.55),0 4px 28px rgba(15,15,14,.85)}
+.rm3 .stats{margin:14px 0 0;font-family:var(--mono,"IBM Plex Mono",monospace);font-size:12px;letter-spacing:.14em;line-height:1.7;opacity:.85;text-wrap:balance}
+.rm3-end .rm3-copy{bottom:calc(48px + env(safe-area-inset-bottom))}
+.rm3-route .rm3-copy,.rm3-hold .rm3-copy{top:calc(env(safe-area-inset-top) + 88px);text-align:center}
+.rm3-route .line{font-size:clamp(30px,8.4vw,40px)}
+@media (min-width:761px){
+  .rm3{aspect-ratio:16/9;max-height:none}
+  .rm3-copy{left:5vw;right:auto}
+  .rm3-end .rm3-copy{bottom:max(5vh,28px)}
+  .rm3 .line{font-size:clamp(40px,4.4vw,72px)}
+  .rm3-route .rm3-copy{left:0;right:0;top:max(8%,72px);text-align:center}
+  .rm3-route .line{font-size:clamp(28px,2.6vw,44px)}
+  .rm3-route .stats{margin-top:8px;white-space:nowrap}
+  .rm3-hold .rm3-copy{top:50%;transform:translateY(-50%);width:min(32vw,520px);text-align:left}
+}
+</style>
 </head>
 <body class="has-bz-bar" data-scene="dark">
 <header class="nav" id="nav">
@@ -92,18 +113,11 @@ html:not(.css) #b1{visibility:visible}
 </section>
 
 <!-- Reduced-motion version: same story, no pin or scrub -->
-<section class="rm-story" aria-label="From the finish line to the keepsake">
-  <div class="rm-panel dark rm-hero">
-    <picture>
-      <source media="(max-width: 760px)" srcset="/boltz-review/onetake/video/finish-mobile.jpg">
-      <img loading="lazy" decoding="async" src="/boltz-review/onetake/video/finish.jpg" alt="A female ultra trail runner finishes a mountain trail ultra at golden hour, coming toward the camera">
-    </picture>
-    <div class="rm-copy"><p class="line">I can’t believe I did&nbsp;that.</p></div>
-  </div>
-  <div class="rm-panel wrap"><img loading="lazy" decoding="async" src="/boltz-review/onetake/video/watch-face.jpg" alt="A GPS watch showing the earned route as an orange line"><div><p class="line">Every kilometre of it.</p></div></div>
-  <div class="rm-panel wrap"><div class="rm-map" id="rmMap"></div><div></div></div>
-  <div class="rm-panel wrap"><img loading="lazy" decoding="async" src="/boltz-review/onetake/img/story/route-tile-d.webp" alt="The Half Guzzler as a flat multi-colour terrain print"><div><p class="mono">HALF GUZZLER · 53.6 KM · 2146 M · 8:52:50 · 20 JUL 2024</p></div></div>
-  <div class="rm-panel wrap"><picture><source type="image/avif" srcset="/boltz-review/onetake/img/flex-d-480-v3.avif 480w, /boltz-review/onetake/img/flex-d-v3.avif 1600w" sizes="(min-width:900px) 50vw, 100vw"><img loading="lazy" decoding="async" src="/boltz-review/onetake/img/flex-d-v3.webp" srcset="/boltz-review/onetake/img/flex-d-480-v3.webp 480w, /boltz-review/onetake/img/flex-d-v3.webp 1600w" sizes="(min-width:900px) 50vw, 100vw" alt="At home in a dark room, the Signature piece hangs on the wall, its dark plate reading ALEX RIVERA, while she sits beside it"></picture><div><p class="line" style="margin-top:28px">For those who earned it.</p></div></div>
+<section class="rm-story v3" aria-label="From the finish line to the keepsake">
+  <!-- D-198: reduced-motion version of One Take v3: three stills from the move with the same lines -->
+  <div class="rm3 rm3-end dark"><picture><source media="(max-width: 760px)" type="image/avif" srcset="/boltz-review/onetake/img/rm/v3-end-m.avif"><source media="(max-width: 760px)" srcset="/boltz-review/onetake/img/rm/v3-end-m.webp"><source type="image/avif" srcset="/boltz-review/onetake/img/rm/v3-end-d.avif"><img loading="eager" decoding="async" src="/boltz-review/onetake/img/rm/v3-end-d.webp" width="1600" height="900" alt="Close-up of her GPS watch on her wrist reading 8:52:50"></picture><div class="rm3-copy"><p class="line">I can’t believe I did&nbsp;that.</p></div></div>
+  <div class="rm3 rm3-route dark"><picture><source media="(max-width: 760px)" type="image/avif" srcset="/boltz-review/onetake/img/rm/v3-route-m.avif"><source media="(max-width: 760px)" srcset="/boltz-review/onetake/img/rm/v3-route-m.webp"><source type="image/avif" srcset="/boltz-review/onetake/img/rm/v3-route-d.avif"><img loading="lazy" decoding="async" src="/boltz-review/onetake/img/rm/v3-route-d.webp" width="1600" height="900" alt="The Half Guzzler route in orange across a flat terrain map"></picture><div class="rm3-copy"><p class="line">Every kilometre of&nbsp;it.</p><p class="stats">HALF GUZZLER · 53.6&nbsp;KM · 2146&nbsp;M · 8:52:50 · 20&nbsp;JUL&nbsp;2024</p></div></div>
+  <div class="rm3 rm3-hold dark"><picture><source media="(max-width: 760px)" type="image/avif" srcset="/boltz-review/onetake/img/rm/v3-hold-m.avif"><source media="(max-width: 760px)" srcset="/boltz-review/onetake/img/rm/v3-hold-m.webp"><source type="image/avif" srcset="/boltz-review/onetake/img/rm/v3-hold-d.avif"><img loading="lazy" decoding="async" src="/boltz-review/onetake/img/rm/v3-hold-d.webp" width="1600" height="900" alt="The Signature piece on a dark wall, plate reading ALEX RIVERA 8:52:50, her finisher medal hanging below on its ribbon"></picture><div class="rm3-copy"><p class="line">For those who earned&nbsp;it.</p></div></div>
 </section>
 
 
