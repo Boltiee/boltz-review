@@ -1,6 +1,7 @@
 name: Deploy review Pages
 on:
-  # push trigger paused while the pack uploads (restored in the last commit)
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
