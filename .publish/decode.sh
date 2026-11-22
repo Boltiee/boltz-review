@@ -55,4 +55,11 @@ if [[ -d "$PROMO" && -d "$ROOT/onetake-v3" ]]; then
   cp "$PROMO/film2.json" "$ROOT/onetake/video/seq/film2.json"
   echo "Promoted One Take v3 to /onetake/"
 fi
+# D-243: maker line on became/darkhour/onetake (onetake-v3 shares /onetake/ range-data.js).
+# Applied AFTER promote so /_parked/onetake-d183/ stays the untouched d183 tree.
+D243="$ROOT/.publish/d243.b64"
+if [[ -d "$D243" ]]; then
+  cat $(ls -1 "$D243"/part-*.txt | sort) | base64 -d | tar -x -C "$ROOT"
+  echo "Applied D-243 maker line (became, darkhour, onetake, onetake-v3)"
+fi
 rm -rf "$ROOT/.publish"
