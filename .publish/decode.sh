@@ -75,4 +75,16 @@ if [[ -d "$D244" ]]; then
   cp "$ROOT/became/assets/range/img/sig320-v1c-poster.webp" "$ROOT/onetake/assets/range/img/sig320-v1c-poster.webp"
   echo "Applied D-244 fix batch (became, darkhour, onetake, onetake-v3, order pages)"
 fi
+# D-245 (3D Signature card _v2, ribbon in Scree #6E675E): new sig320-v1c2 card fronts (range + order) and 360 poster,
+# re-encoded from 3D's lossless masters (WebP q95, AVIF q86 4:4:4; poster WebP q92) so the plate stays within ~2 levels.
+# Data files and pages point at the new names. Applied after D-244. Images ship once (became) and are copied.
+D245="$ROOT/.publish/d245.b64"
+if [[ -d "$D245" ]]; then
+  cat $(ls -1 "$D245"/part-*.txt | sort) | base64 -d | tar -x -C "$ROOT"
+  for s in darkhour onetake; do
+    cp "$ROOT"/became/assets/range/img/sig320-v1c2-* "$ROOT/$s/assets/range/img/"
+    cp "$ROOT"/became/assets/order/img/sig320-v1c2-* "$ROOT/$s/assets/order/img/"
+  done
+  echo "Applied D-245 Signature card v2 (became, darkhour, onetake, onetake-v3, order pages)"
+fi
 rm -rf "$ROOT/.publish"
