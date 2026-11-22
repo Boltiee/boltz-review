@@ -62,4 +62,17 @@ if [[ -d "$D243" ]]; then
   cat $(ls -1 "$D243"/part-*.txt | sort) | base64 -d | tar -x -C "$ROOT"
   echo "Applied D-243 maker line (became, darkhour, onetake, onetake-v3)"
 fi
+# D-244 (Lucas 11:53 AM fix batch): Signature $399 in Basalt, How it works full width, size tags under renders,
+# Signature 360 (height cap, back placeholder removed, muted ribbon, hint off the medal), Became print clears the bar,
+# line breaks, One Take header fade, curly apostrophes, one footer, credit contrast, 44 px taps, close block without the
+# in-page month line / second Make yours, Dark Hour hero v3 (+ LQIP, og). Applied last. The GLB and poster ship once and are copied.
+D244="$ROOT/.publish/d244.b64"
+if [[ -d "$D244" ]]; then
+  cat $(ls -1 "$D244"/part-*.txt | sort) | base64 -d | tar -x -C "$ROOT"
+  cp "$ROOT/became/assets/3d/signature320_muted_v1c.glb" "$ROOT/darkhour/assets/3d/signature320_muted_v1c.glb"
+  cp "$ROOT/became/assets/3d/signature320_muted_v1c.glb" "$ROOT/onetake/3d/signature320_muted_v1c.glb"
+  cp "$ROOT/became/assets/range/img/sig320-v1c-poster.webp" "$ROOT/darkhour/assets/range/img/sig320-v1c-poster.webp"
+  cp "$ROOT/became/assets/range/img/sig320-v1c-poster.webp" "$ROOT/onetake/assets/range/img/sig320-v1c-poster.webp"
+  echo "Applied D-244 fix batch (became, darkhour, onetake, onetake-v3, order pages)"
+fi
 rm -rf "$ROOT/.publish"
